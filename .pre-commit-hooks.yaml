@@ -1,0 +1,11 @@
+- id: lxml
+  name: lxml
+  description: Formats XML files using lxml
+  entry: lxml_format
+  language: python
+  types: [xml]
+  stages:
+    - pre-commit
+    - pre-merge-commit
+    - pre-push
+    - manual
