@@ -1,4 +1,4 @@
-# lxml `pre-commit` hook
+# `pre-commit` hook to reformat XML files
 
 This project implements a [pre-commit] [hook] to [gently](#example) reformat XML
 files. Reformatting adds newlines and indentation spaces, and cleans up tags
