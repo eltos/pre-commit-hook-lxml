@@ -20,28 +20,29 @@ def pretty_print(content: bytes, space: str, width: int) -> None:
                         xml_declaration=True)
 
 
-def beautify(filename: str, width: int, retries: int) -> None:
-  # Acquire properties from .editorconfig
+def get_indent_from_editorconfig(filename: str) -> tuple[int, str]:
   try:
     properties = get_properties(os.path.abspath(filename))
+    if 'indent_style' in properties:
+      style = properties['indent_style']
+      if style == 'tab':
+        return 1, '\t'
+      if 'indent_size' in properties and style == 'space':
+        return int(properties['indent_size']), ' '
   except EditorConfigError:
-    logging.warning("Error getting EditorConfig properties", exc_info=True)
+    logging.warning("Error getting EditorConfig properties.", exc_info=True)
+  return INDENT, ' '
 
-  # Resolve indentation and its size from editor config or provided incoming
-  # arguments
-  space = ' '
-  style = 'space'
-  if 'indent_style' in properties:
-    style = properties['indent_style']
-    if style == 'tab':
-      width = 1
-      space = '\t'
-      logging.debug(f'Indentation set to tabs via editorconfig')
-  if style == 'space':
-    if 'indent_size' in properties:
-      width = int(properties['indent_size'])
-      space = ' '
-      logging.debug(f'Indentation set to {width} via editorconfig')
+
+def beautify(filename: str, width: int, retries: int) -> None:
+  # Get the indentation width and style from the CLI or .editorconfig
+  if width < 0:
+    width, space = get_indent_from_editorconfig(filename)
+    logging.debug(f'Indentation set to {width} spaces via editorconfig or default.')
+  else:
+    space = ' '
+    style = 'space'
+    logging.debug(f'Indentation set to {width} via CLI')
 
   # Read file content, binary mode
   with open(filename, 'rb') as f:
@@ -71,8 +72,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     '-i', '--indent',
     dest='width',
     type=int,
-    default=INDENT,
-    help='Number of spaces to use for indentation when no .editorconfig found. Default: %(default)s)'
+    default=-1,
+    help='Number of spaces to use, overrides .editorconfig when positive. Default: %(default)s)'
   )
 
   parser.add_argument(
