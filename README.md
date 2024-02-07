@@ -28,7 +28,7 @@ hook, i.e. a release of this project.
   - repo: https://github.com/efrecon/pre-commit-hook-lxml
     rev: v0.1.0
     hooks:
-      - id: lxml_format
+      - id: lxml
 ```
 
   [type]: https://pre-commit.com/#filtering-files-with-types
@@ -44,7 +44,7 @@ enforce 3 spaces of indentation for all XML file, independently of your
   - repo: https://github.com/efrecon/pre-commit-hook-lxml
     rev: v0.1.0
     hooks:
-      - id: lxml_format
+      - id: lxml
         args:
           - --indent=3
 ```
