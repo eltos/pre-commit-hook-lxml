@@ -1,13 +1,13 @@
 # `pre-commit` hook to reformat XML files
 
 This project implements a [pre-commit] [hook] to [gently](#example) reformat XML
-files. Reformatting adds newlines and indentation spaces, and cleans up tags
-using the [tostring] function of the [lxml] project. By default, indentation
-details are picked from the [editorconfig] settings and mapped as best as
-possible to the capabilities of the [tostring] function, i.e. either a number of
-spaces, or indent using tabs. The default is also to unify the line-endings of
-the reformatted files (per file), and to add an extra space at the end of
-self-closing tags -- for extra readability.
+files. Reformatting adds newlines and indentation spaces, cleans up and
+simplifies tags using the [tostring] function of the [lxml] project. By default,
+indentation details are picked from the [editorconfig] settings and mapped as
+best as possible to the capabilities of the [tostring] function, i.e. either a
+number of spaces, or indent using tabs. The default is also to unify the
+line-endings of the reformatted files (per file), and to add an extra space at
+the end of self-closing tags -- for extra readability.
 
   [pre-commit]: https://pre-commit.com/
   [hook]: ./.pre-commit-hooks.yaml
@@ -18,24 +18,31 @@ self-closing tags -- for extra readability.
 ## Usage
 
 Add the following to your `.pre-commit-config.yaml` file. The default is to
-automatically reformat all files of [type] `xml`.
+automatically reformat all files of [type] `xml`. You might want to check the
+latest version of the repository [here] and change the rev key.
+
+Note: The rev is NOT the version of [lxml] to run, but rather the version of the
+hook, i.e. a release of this project.
 
 ```yaml
   - repo: https://github.com/efrecon/pre-commit-hook-lxml
+    rev: v0.1.0
     hooks:
       - id: lxml_format
 ```
 
   [type]: https://pre-commit.com/#filtering-files-with-types
+  [here]: https://github.com/efrecon/pre-commit-hook-lxml/releases
 
 If your project does not use [editorconfig], you can still enforce indentation
 for all files through the `--indent` CLI option/hook argument. This can also be
 used to override [editorconfig] settings. For example, the following would
-enforce 3 spaces of indentation for all XML file, independantly of your
+enforce 3 spaces of indentation for all XML file, independently of your
 [editorconfig] settings or if there are no settings:
 
 ```yaml
   - repo: https://github.com/efrecon/pre-commit-hook-lxml
+    rev: v0.1.0
     hooks:
       - id: lxml_format
         args:
@@ -76,7 +83,7 @@ The CLI options can be used from the YAML pre-commit configuration, using the
 + `-s` or `--self-closing` controls if there should be an additional space just
   before the `/>` characters in self-closing tags. Possible values are:
   - `space`: a space is always added, for all self-closing tags. This is the
-    default.
+    default. See [example](#example).
   - `nospace`: no extra space will be added, this the LXML default.
   - `auto`: a space will be added if the file contained the ` />` sequence of
     characters.
@@ -109,28 +116,42 @@ The following example
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <test><inside>text</inside>
-<long>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</long>
+<long>    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</long>
 <space  > </space    >
 <attr attr0="short" attr1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud" attr2="exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"/>
-<attrext attr0="osdifjsdfoi" attr2="oooddddddddddddd">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</attrext>
+                        <attrext attr0="osdifjsdfoi" attr2="oooddddddddddddd">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</attrext>
+                <empty></empty>
 </test>
 ```
 
 would be reformatted to the following, provided an indentation of `2` spaces:
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <test>
   <inside>text</inside>
-  <long>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</long>
+  <level>
+    <one />
+    <two>
+      <more />
+    </two>
+  </level>
+  <long>    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</long>
   <space> </space>
-  <attr attr0="short" attr1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud" attr2="exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"></attr>
+  <attr attr0="short" attr1="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud" attr2="exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" />
   <attrext attr0="osdifjsdfoi" attr2="oooddddddddddddd">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</attrext>
+  <empty />
 </test>
 ```
 
-Note that spacing in the `<space>` tag has been cleaned up, but its content
-preserved. Also, note that the `<inside>` tag has been moved to a separate line.
+Note that:
+
++ the `<inside>` tag has been moved to a separate line.
++ the `<level>` tree is broken into several lines, and indented with `2` spaces
+  at each level.
++ spacing in the `<space>` tag has been cleaned up, but its content preserved.
++ the `<empty>` tag has been replaced by a self-closing tag.
++ the `<empty />` self-closing tag has an extra space before the closing `/>`
 
 ## Development
 
