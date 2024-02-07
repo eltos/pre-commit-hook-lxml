@@ -28,7 +28,10 @@ def pretty_print(content: bytes, space: str, indent: int) -> bytes:
   Returns:
     bytes: The pretty printed XML content.
   """
-  parser = etree.XMLParser(remove_blank_text=True)
+  parser = etree.XMLParser(
+                  remove_blank_text=False,
+                  recover=True,
+                  strip_cdata=False)
   tree = etree.XML(content, parser=parser).getroottree()
   etree.indent(tree, space=space * indent)
   return etree.tostring(tree,
