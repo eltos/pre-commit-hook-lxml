@@ -1,6 +1,16 @@
-- id: lxml
-  name: lxml
-  description: Formats XML files using lxml
+- id: format-xml
+  name: Gently (re)format XML files
+  description: |
+    Reformat XML files using the pretty_print functionality of the lxml library.
+    + Ensure the tree is properly indented, one tag per line
+    + Pick indentation settings from editorconfig, whenever available
+    + Clean up spacing in tags
+    + Automatically rewrite as self-closing tags
+    + Add an extra space at the end of self-closing tags (optional)
+    + Automatically use the same/change line endings
+    + Preserve spacing in tags content
+    + Keep comments
+    + Remove blank lines
   entry: lxml_format
   language: python
   types: [xml]

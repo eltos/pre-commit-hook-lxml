@@ -1,13 +1,20 @@
 # `pre-commit` hook to reformat XML files
 
 This project implements a [pre-commit] [hook] to [gently](#example) reformat XML
-files. Reformatting adds newlines and indentation spaces, cleans up and
-simplifies tags using the [tostring] function of the [lxml] project. By default,
-indentation details are picked from the [editorconfig] settings and mapped as
-best as possible to the capabilities of the [tostring] function, i.e. either a
-number of spaces, or indent using tabs. The default is also to unify the
-line-endings of the reformatted files (per file), and to add an extra space at
-the end of self-closing tags -- for extra readability.
+files using the [tostring] function of the [lxml] project.
+
++ Ensure the tree is properly indented, one tag per line
++ Pick indentation settings from [editorconfig], whenever available. Settings
+  are mapped as best as possible to the capabilities of the [tostring] function,
+  i.e. either a number of spaces, or indent using tabs.
++ Clean up spacing in tags
++ Automatically rewrite as self-closing tags
++ Add an extra space at the end of self-closing tags -- for extra readability
+  (optional)
++ Automatically use the same/change line endings
++ Preserve spacing in tags content
++ Keep comments
++ Remove blank lines
 
   [pre-commit]: https://pre-commit.com/
   [hook]: ./.pre-commit-hooks.yaml
