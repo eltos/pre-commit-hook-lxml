@@ -33,9 +33,9 @@ hook, i.e. a release of this project.
 
 ```yaml
   - repo: https://github.com/efrecon/pre-commit-hook-lxml
-    rev: v0.1.0
+    rev: v0.1.1
     hooks:
-      - id: lxml
+      - id: format-xml
 ```
 
   [type]: https://pre-commit.com/#filtering-files-with-types
@@ -49,9 +49,9 @@ enforce 3 spaces of indentation for all XML file, independently of your
 
 ```yaml
   - repo: https://github.com/efrecon/pre-commit-hook-lxml
-    rev: v0.1.0
+    rev: v0.1.1
     hooks:
-      - id: lxml
+      - id: format-xml
         args:
           - --indent=3
 ```
@@ -60,9 +60,9 @@ The pre-commit hook can be controlled using a number of environment
 [variables](#environment-variables), all starting with
 `PRE_COMMIT_HOOK_LXML_FORMAT_` and a number of [options](#cli-options). Use
 options to change the behaviour for all users of your repository, e.g.
-specifying the indentation. Use environment variables to adapt to your local
-client-side requirements, e.g. turning up logging to understand possible
-problems.
+specifying the indentation. Options can be specified under the `args` key in the
+YAML configuration. Use environment variables to adapt to your local client-side
+requirements, e.g. turning up logging to understand possible problems.
 
 ### CLI Options
 
