@@ -60,9 +60,9 @@ def get_indent_from_editorconfig(filename: str) -> tuple[int, str]:
       if 'indent_size' in properties and style == 'space':
         return int(properties['indent_size']), ' '
   except EditorConfigError:
-    logging.warning("Error getting EditorConfig properties.", exc_info=True)
+    logging.warning('Error getting EditorConfig properties.', exc_info=True)
   except ValueError:
-    logging.warning("Error parsing indent_size in editorconfig.", exc_info=True)
+    logging.warning('Error parsing indent_size in editorconfig.', exc_info=True)
   return INDENT, ' '
 
 
@@ -116,10 +116,12 @@ def beautify(
   if self_closing == 'space':
     logging.debug(f'Self-closing tags will have a space: {filename}')
     xml = xml.replace(b'/>\n', b' />\n')
+    xml = xml.replace(b'  />\n', b' />\n')
   elif self_closing == 'auto':
     if b' />' in original:
       logging.info(f'Detected self-closing tags with space in {filename}')
       xml = xml.replace(b'/>\n', b' />\n')
+      xml = xml.replace(b'  />\n', b' />\n')
 
   # Convert line endings, if relevant. Detect from original content if
   # necessary. Note: the output of pretty_print is always using unix line
@@ -148,7 +150,7 @@ def beautify(
     if write:
       logging.info(f'Formatted: {filename}')
       try:
-        with open(filename, "wb") as f:
+        with open(filename, 'wb') as f:
           f.write(xml)
       except Exception as e:
         logging.error(f'Failed to write file: {filename}: {e}')
@@ -172,7 +174,7 @@ def str_to_bool(s) -> bool:
     bool: The boolean value corresponding to the string.
 
   """
-  pattern=re.compile("^\s*(true|on|yes|1|t|y)\s*$", re.IGNORECASE)
+  pattern=re.compile(r'^\s*(true|on|yes|1|t|y)\s*$', re.IGNORECASE)
   return bool(pattern.match(s))
 
 
