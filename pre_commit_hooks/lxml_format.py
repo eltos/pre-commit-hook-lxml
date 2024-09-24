@@ -102,8 +102,8 @@ def beautify(
     # Get the indentation indent and style from the CLI or .editorconfig
     if indent < 0:
         indent, space = get_indent_from_editorconfig(filename)
-        logging.debug(f'Indentation set to {
-                      indent} spaces via editorconfig or default.')
+        logging.debug(
+            f'Indentation set to {indent} spaces via editorconfig or default.')
     else:
         space = ' '
         logging.debug(f'Indentation set to {indent} via CLI')
@@ -237,15 +237,18 @@ def str_to_bool(s) -> bool:
 def main(argv: Sequence[str] | None = None) -> int:
     """
     Main function for the lxml_format script. Parses the command-line arguments,
-    takes into account the environment variables, and calls the beautify function
-    on each file to reformat or report upon bad formatting.
+    takes into account the environment variables, and calls the beautify
+    function on each file to reformat or report upon bad formatting.
 
     Args:
-      argv: A sequence of command-line arguments. If None, sys.argv[1:] will be used.
+      argv: A sequence of command-line arguments. If None, sys.argv[1:] will be
+      used.
 
     Returns:
-      An integer representing the exit code. 0 indicates success, while non-zero values indicate errors.
-      1 is used for general errors, while 2 and above are used to communicate the number of erroneous files: the exit code minus 2.
+      An integer representing the exit code. 0 indicates success, while non-zero
+      values indicate errors. 1 is used for general errors, while 2 and above
+      are used to communicate the number of erroneous files: the exit code minus
+      2.
     """
     argv = argv if argv is not None else sys.argv[1:]
     parser = argparse.ArgumentParser(
